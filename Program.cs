@@ -2,8 +2,6 @@
 
 
             // TODO
-            // jogador - criar uma structure para ser o jogador
-            //     - Nome,pontuação, dificuldade, tentativas
             // main
             //      - log de erros
             // logger
@@ -19,12 +17,7 @@ namespace jogo_adivinha
         public static void Main()
         {
             int? executar = 1;
-            int pts; //jogador ***** 
-            int tentativas = 10; //jogador
-            dificuldade dif = dificuldade.medio;//jogador
-            string apelido; //jogador
-            apelido = ""; //jogador
-
+            Jogador jogador = new Jogador("",10,dificuldade.medio);
 
             Console.WriteLine("\n\n************************ JOGO DA ADIVINHAÇÃO ************************");
             do{
@@ -33,20 +26,23 @@ namespace jogo_adivinha
                     switch (executar){
                         case 1:
                             //jogar
-                            pts = jogar(tentativas);
-                            apelido = inputApelido(apelido);
+                            jogador.pts = jogar(jogador.tentativas);
+                            jogador.apelido = inputApelido(jogador.apelido);
                             //TODO: salvar e confirmar que a pontuação foi salva
                             break;
                         case 2:
                             //Preencher apelido
-                            apelido = inputApelido(apelido);
+                            jogador.apelido = inputApelido(jogador.apelido);
                             break;
                         case 3: 
                             //Ver pontuações
                             break;
                         case 4:
                             //Configurar dificuldade
-                            dif = confDificuldade(dif, ref tentativas);
+                            int _tentativas = jogador.tentativas;
+                            jogador.dif = confDificuldade(jogador.dif, ref _tentativas);
+                            jogador.tentativas = _tentativas;
+
                             break;
                         case 5:
                             //Sair
@@ -154,7 +150,7 @@ namespace jogo_adivinha
             //checa se apelido esta preenchido    
             if (String.IsNullOrEmpty(_apelido)){
                 while(true){
-                    Console.Write("\nDigite seu apelido: ");     
+                    Console.Write("O apelido não foi informado\nDigite seu apelido: ");     
                     _apelido = Console.ReadLine();
                     if (String.IsNullOrEmpty(_apelido)){
                     Console.Write("\nO apelido não pode ser vazio, digite novamente: ");
@@ -162,9 +158,23 @@ namespace jogo_adivinha
                         break;
                     }                  
                 }  
+            }else{
+                Console.WriteLine($"O apelido atual é: {_apelido}, deseja alterar? Digite S ou N");
+                string _alterar = Console.ReadLine().ToUpper();
+                while(_alterar !="S"&&_alterar!="N"){
+                    Console.WriteLine("Opção inválida, digite novamente");
+                    _alterar = Console.ReadLine().ToUpper();
+                }
+                if (_alterar =="S"){
+                    Console.WriteLine("Digite o novo apelido");
+                    _apelido = Console.ReadLine();
+                }else{
+                    return _apelido;
+                }
             }      
             return _apelido;    
         }    
+
 
     
     }
